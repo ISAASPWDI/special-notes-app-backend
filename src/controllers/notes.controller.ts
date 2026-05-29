@@ -9,7 +9,6 @@ export async function createNote(req: Request, res: Response): Promise<void> {
       res.status(400).json({ message: 'Note content is required' });
       return;
     }
-
     const id = await NotesModel.create(note);
     const createdNote = await NotesModel.findById(id);
     res.status(201).json(createdNote);
@@ -31,14 +30,12 @@ export async function getAllNotes(req: Request, res: Response) {
 
 export async function getNoteById(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const note = await NotesModel.findById(id);
-    
     if (!note) {
       res.status(404).json({ message: 'Note not found' });
       return;
     }
-    
     res.status(200).json(note);
   } catch (error) {
     console.error('Error fetching note:', error);
@@ -48,20 +45,17 @@ export async function getNoteById(req: Request, res: Response): Promise<void> {
 
 export async function updateNote(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const note: Note = req.body;
-    
     if (!note.content) {
       res.status(400).json({ message: 'Note content is required' });
       return;
     }
-    
     const noteExists = await NotesModel.findById(id);
     if (!noteExists) {
       res.status(404).json({ message: 'Note not found' });
       return;
     }
-    
     await NotesModel.update(id, note);
     const updatedNote = await NotesModel.findById(id);
     res.status(200).json(updatedNote);
@@ -73,14 +67,12 @@ export async function updateNote(req: Request, res: Response): Promise<void> {
 
 export async function deleteNote(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
-    
+    const id = parseInt(req.params.id as string);
     const noteExists = await NotesModel.findById(id);
     if (!noteExists) {
       res.status(404).json({ message: 'Note not found' });
       return;
     }
-    
     await NotesModel.delete(id);
     res.status(200).json({ message: 'Note deleted successfully' });
   } catch (error) {
