@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import TimelineModel from '../models/timeline.model';
 import { TimelineEvent } from '../types';
 
-export async function createTimelineEvent(req: Request, res: Response):Promise<void> {
+export async function createTimelineEvent(req: Request, res: Response): Promise<void> {
   try {
     const event: TimelineEvent = req.body;
     if (!event.title || !event.event_date) {
@@ -18,7 +18,7 @@ export async function createTimelineEvent(req: Request, res: Response):Promise<v
   }
 }
 
-export async function getAllTimelineEvents(req: Request, res: Response):Promise<void> {
+export async function getAllTimelineEvents(req: Request, res: Response): Promise<void> {
   try {
     const events = await TimelineModel.findAll();
     res.status(200).json(events);
@@ -28,9 +28,9 @@ export async function getAllTimelineEvents(req: Request, res: Response):Promise<
   }
 }
 
-export async function getTimelineEventById(req: Request, res: Response):Promise<void> {
+export async function getTimelineEventById(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const event = await TimelineModel.findById(id);
     if (!event) {
       res.status(404).json({ message: 'Timeline event not found' });
@@ -43,9 +43,9 @@ export async function getTimelineEventById(req: Request, res: Response):Promise<
   }
 }
 
-export async function updateTimelineEvent(req: Request, res: Response):Promise<void> {
+export async function updateTimelineEvent(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const event: TimelineEvent = req.body;
     if (!event.title || !event.event_date) {
       res.status(400).json({ message: 'Title and event date are required' });
@@ -65,9 +65,9 @@ export async function updateTimelineEvent(req: Request, res: Response):Promise<v
   }
 }
 
-export async function deleteTimelineEvent(req: Request, res: Response):Promise<void> {
+export async function deleteTimelineEvent(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const exists = await TimelineModel.findById(id);
     if (!exists) {
       res.status(404).json({ message: 'Timeline event not found' });
