@@ -30,7 +30,7 @@ export async function getAllQuizzes(req: Request, res: Response) {
 
 export async function getQuizById(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const question = await QuizModel.findById(id);
     if (!question) {
       res.status(404).json({ message: 'Quiz question not found' });
@@ -45,7 +45,7 @@ export async function getQuizById(req: Request, res: Response): Promise<void> {
 
 export async function updateQuiz(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const question: QuizQuestion = req.body;
     if (!question.question || !question.answer) {
       res.status(400).json({ message: 'Question and answer are required' });
@@ -67,7 +67,7 @@ export async function updateQuiz(req: Request, res: Response): Promise<void> {
 
 export async function deleteQuiz(req: Request, res: Response): Promise<void> {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const exists = await QuizModel.findById(id);
     if (!exists) {
       res.status(404).json({ message: 'Quiz question not found' });
