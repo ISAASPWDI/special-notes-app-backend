@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import ComplimentsModel from '../models/compliments.model';
 import { Compliment } from '../types';
 
-export const createCompliment = async (req: Request, res: Response):Promise<void> => {
+export const createCompliment = async (req: Request, res: Response): Promise<void> => {
   try {
     const compliment: Compliment = req.body;
     if (!compliment.content) {
@@ -18,7 +18,7 @@ export const createCompliment = async (req: Request, res: Response):Promise<void
   }
 };
 
-export const getAllCompliments = async (req: Request, res: Response):Promise<void> => {
+export const getAllCompliments = async (req: Request, res: Response): Promise<void> => {
   try {
     const compliments = await ComplimentsModel.findAll();
     res.status(200).json(compliments);
@@ -28,16 +28,14 @@ export const getAllCompliments = async (req: Request, res: Response):Promise<voi
   }
 };
 
-export const getComplimentById = async (req: Request, res: Response):Promise<void> => {
+export const getComplimentById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const compliment = await ComplimentsModel.findById(id);
-
     if (!compliment) {
       res.status(404).json({ message: 'Compliment not found' });
       return;
     }
-
     res.status(200).json(compliment);
   } catch (error) {
     console.error('Error fetching compliment:', error);
@@ -45,22 +43,19 @@ export const getComplimentById = async (req: Request, res: Response):Promise<voi
   }
 };
 
-export const updateCompliment = async (req: Request, res: Response):Promise<void> => {
+export const updateCompliment = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const compliment: Compliment = req.body;
-
     if (!compliment.content) {
       res.status(400).json({ message: 'Content is required' });
       return;
     }
-
     const complimentExists = await ComplimentsModel.findById(id);
     if (!complimentExists) {
       res.status(404).json({ message: 'Compliment not found' });
       return;
     }
-
     await ComplimentsModel.update(id, compliment);
     const updatedCompliment = await ComplimentsModel.findById(id);
     res.status(200).json(updatedCompliment);
@@ -70,16 +65,14 @@ export const updateCompliment = async (req: Request, res: Response):Promise<void
   }
 };
 
-export const deleteCompliment = async (req: Request, res: Response):Promise<void> => {
+export const deleteCompliment = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id = parseInt(req.params.id);
-
+    const id = parseInt(req.params.id as string);
     const complimentExists = await ComplimentsModel.findById(id);
     if (!complimentExists) {
       res.status(404).json({ message: 'Compliment not found' });
       return;
     }
-
     await ComplimentsModel.delete(id);
     res.status(200).json({ message: 'Compliment deleted successfully' });
   } catch (error) {
